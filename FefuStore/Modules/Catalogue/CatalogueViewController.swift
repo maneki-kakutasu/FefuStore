@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CatalogueViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
