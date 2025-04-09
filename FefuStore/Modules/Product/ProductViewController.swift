@@ -40,7 +40,7 @@ class ProductViewController: UIViewController {
     private lazy var containerButtonView: UIView = {
         let view = UIView()
         view.backgroundColor = Assets.Colors.textSecondaryColor
-        view.dropShadow(offset: CGSizeMake(0, -2))
+        view.dropShadow(offset: CGSizeMake(0, 2))
         return view
     }()
     
