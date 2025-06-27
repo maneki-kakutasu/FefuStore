@@ -9,14 +9,16 @@ import UIKit
 import SnapKit
 
 class ProductViewController: UIViewController {
-    // MARK: - Private Properties
-    
-    private let sizes = ["XXS","XS", "S", "M", "L", "XL", "XXL", "XXXL"]
+    // MARK: - Variables
+
+    private let sizes = ["XXS","XS", "S", "M", "L", "XL", "XXL"]
+
     private var selectedSize: String?
-    
-    // MARK: - UI Elements
-    
-    // Main Containers
+
+    var product: ProductModel
+
+    // MARK: - UIElements
+
     private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -37,23 +39,14 @@ class ProductViewController: UIViewController {
         return stack
     }()
     
-    private lazy var containerButtonView: UIView = {
-        let view = UIView()
-        view.backgroundColor = Assets.Colors.textSecondaryColor
-        view.dropShadow(offset: CGSizeMake(0, 2))
-        return view
-    }()
-    
-    // Product Info Section
-    
-    private lazy var productImage: UIImageView = {
+    private lazy var itemImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = Assets.Images.loafersImage
+        
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    private lazy var newTag: UIImageView = {
+    private lazy var newImage: UIImageView = {
         let image = UIImageView()
         image.image = Assets.Icons.newTag
         return image
@@ -65,33 +58,56 @@ class ProductViewController: UIViewController {
         return stack
     }()
     
-    private lazy var titleLabel: UILabel = {
+    private lazy var titleLable: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.text = "Кожанные лоферы"
+        
         label.textColor = Assets.Colors.textPrimaryColor
         label.numberOfLines = 1
         return label
     }()
-    
-    private lazy var infoButton: InfoButton = {
-        let but = InfoButton()
+
+
+    private lazy var infoButton: SecondaryButton = {
+        let but = SecondaryButton()
+        but.configureButton(image: Assets.Icons.infoButton)
         let action = UIAction { action in
         debugPrint("кнопка информации нажата")}
         but.addAction(action, for: .primaryActionTriggered)
         return but
     }()
     
-    private lazy var descriptionLabel: UILabel = {
+    private lazy var descriptionLable: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.text = "Лоферы из натуральной кожи. Фигурная союзка с фактурным швом по контуру. Зауженный мыс. Кожаная стелька и подкладка. Прорезиненная подошва. В комплект входит пыльник."
+        
         label.numberOfLines = 0
         label.textColor = Assets.Colors.textDescriptionColor
         return label
     }()
     
-    // Size Selection Section
+    // container buyButton and sizeScroll
+    private lazy var containerButtonView: UIView = {
+        let view = UIView()
+        view.backgroundColor = Assets.Colors.textSecondaryColor
+        view.dropShadow(offset: CGSizeMake(0, -2))
+        return view
+    }()
+    
+    private lazy var buyButton: PrimaryButton = {
+        let but = PrimaryButton()
+        let action = UIAction { action in
+        debugPrint("кнопка купить нажата")}
+        but.addAction(action, for: .primaryActionTriggered)
+        return but
+    }()
+    
+    private lazy var borderView: UIView = {
+        let view = UIView()
+        view.backgroundColor = Assets.Colors.borderColor
+        return view
+    }()
     
     private lazy var sizeScrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -106,32 +122,29 @@ class ProductViewController: UIViewController {
         stack.spacing = 8
         return stack
     }()
-    
-    private lazy var borderView: UIView = {
-        let view = UIView()
-        view.backgroundColor = Assets.Colors.borderColor
-        return view
-    }()
-    
-    private lazy var buyButton: PrimaryButton = {
-        let but = PrimaryButton()
-        let action = UIAction { action in
-        debugPrint("кнопка купить нажата")}
-        but.addAction(action, for: .primaryActionTriggered)
-        return but
-    }()
-    
+
+    init(product: ProductModel) {
+        self.product = product
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        commonInit()
-        configure(sizes: sizes)
+        
+        setupUI()
+        bind(sizes: sizes)
+        configureWithProduct()
     }
     
     // MARK: - Methods
     
-    func configure(sizes: [String], selectedSize: String? = nil) {
+    func bind(sizes: [String], selectedSize: String? = nil) {
         sizeContentStack.subviews.forEach { $0.removeFromSuperview() }
         sizeContentStack.subviews.forEach { sizeContentStack.removeArrangedSubview($0) }
         
@@ -140,19 +153,39 @@ class ProductViewController: UIViewController {
             view.configure(size: size, isSelected: selectedSize == size)
             view.delegate = self
             sizeContentStack.addArrangedSubview(view)
+
         }
+
     }
+    
+    private func configureWithProduct() {
+        itemImage.image = product.image
+        titleLable.text = product.title
+        descriptionLable.text = product.description
+        // Если нужно, можно также обновить цену на кнопке покупки
+        // buyButton.setTitle("В корзину " + product.price, for: .normal)
+    }
+
 }
 
-// MARK: - Common Init
+extension ProductViewController: SizeEntityViewDelegate {
+
+    func didSelectSize(with size: String) {
+        bind(sizes: sizes, selectedSize: size)
+        
+    }
+
+}
 
 extension ProductViewController {
-    func commonInit() {
+    
+    func setupUI() {
+        // add main container
         view.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
+        // add buy button container
         containerView.addSubview(containerButtonView)
         containerButtonView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
@@ -167,13 +200,14 @@ extension ProductViewController {
             make.height.equalTo(48)
         }
         
+        //add border
         containerButtonView.addSubview(borderView)
         borderView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(1)
             make.bottom.equalTo(buyButton.snp.top).inset(-12)
         }
-
+        //add sizeScroll
         containerButtonView.addSubview(sizeScrollView)
         sizeScrollView.snp.makeConstraints { make in
             make.height.equalTo(34)
@@ -187,26 +221,27 @@ extension ProductViewController {
             make.height.equalTo(sizeScrollView.snp.height)
         }
     
+        //add scroll
         containerView.addSubview(screenScrollView)
         screenScrollView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalTo(containerButtonView.snp.top)
         }
-
+        //add content view
         screenScrollView.addSubview(contentStack)
         contentStack.snp.makeConstraints { make in
             make.edges.equalTo(screenScrollView.contentLayoutGuide)
             make.width.equalTo(screenScrollView.snp.width)
         }
-
-        contentStack.addArrangedSubview(productImage)
-        productImage.snp.makeConstraints { make in
+        //add content
+        contentStack.addArrangedSubview(itemImage)
+        itemImage.snp.makeConstraints { make in
             make.height.equalTo(250)
         }
 
-        productImage.addSubview(newTag)
-        newTag.snp.makeConstraints { make in
+        itemImage.addSubview(newImage)
+        newImage.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
             make.leading.equalToSuperview()
             make.height.equalTo(24)
@@ -218,23 +253,18 @@ extension ProductViewController {
             make.height.equalTo(32)
         }
         
-        titleStack.addArrangedSubview(titleLabel)
+        titleStack.addArrangedSubview(titleLable)
         
         titleStack.addArrangedSubview(infoButton)
         infoButton.snp.makeConstraints { make in
             make.height.width.equalTo(32)
         }
         
-        contentStack.addArrangedSubview(descriptionLabel)
+        contentStack.addArrangedSubview(descriptionLable)
+        // MARK: - Configure
 
         view.backgroundColor = .white
+        
     }
-}
 
-// MARK: - Delegates
-
-extension ProductViewController: SizeEntityViewDelegate {
-    func didSelectSize(with size: String) {
-        configure(sizes: sizes, selectedSize: size)
-    }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A407565C2E0AACAC00271F80 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = A407565B2E0AACAC00271F80 /* Sentry */; };
 		A451FBDC2DA23F5600538935 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A451FBDB2DA23F5600538935 /* SnapKit */; };
 		A451FBE62DA2458800538935 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A451FBE52DA2458800538935 /* README.md */; };
 /* End PBXBuildFile section */
@@ -43,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A451FBDC2DA23F5600538935 /* SnapKit in Frameworks */,
+				A407565C2E0AACAC00271F80 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +89,7 @@
 			name = FefuStore;
 			packageProductDependencies = (
 				A451FBDB2DA23F5600538935 /* SnapKit */,
+				A407565B2E0AACAC00271F80 /* Sentry */,
 			);
 			productName = FefuStore;
 			productReference = A451FBC22DA23EB200538935 /* FefuStore.app */;
@@ -118,6 +121,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				A451FBDA2DA23F5600538935 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				A407565A2E0AACAC00271F80 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A451FBC32DA23EB200538935 /* Products */;
@@ -348,6 +352,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A407565A2E0AACAC00271F80 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			requirement = {
+				kind = exactVersion;
+				version = 8.52.1;
+			};
+		};
 		A451FBDA2DA23F5600538935 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -359,6 +371,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A407565B2E0AACAC00271F80 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A407565A2E0AACAC00271F80 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
 		A451FBDB2DA23F5600538935 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A451FBDA2DA23F5600538935 /* XCRemoteSwiftPackageReference "SnapKit" */;

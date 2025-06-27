@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Sentry
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,7 +14,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        SentrySDK.start { options in
+            options.dsn = "https://examplePublicKey@o0.ingest.sentry.io/0"
+            options.debug = true // Enabled debug when first installing is always helpful
+            // Adds IP for users.
+            // For more information, visit: https://docs.sentry.io/platforms/apple/data-management/data-collected/
+            options.sendDefaultPii = true
+        }
+        
         return true
     }
 

@@ -23,6 +23,7 @@ struct Assets {
         static let buttonColor = UIColor(named: "ButtonColor")
         static let buttonSelectedColor = UIColor(named: "ButtonSelectedColor")
         static let priceTagColor = UIColor(named: "PriceTagColor")
+        static let priceTextColor = UIColor(named: "PriceTextColor")
         
         // Background colors
         static let primaryBackgroundColor = UIColor(named: "PrimaryBackgroundColor")
@@ -35,14 +36,22 @@ struct Assets {
         static let loafersImage = UIImage(named: "LoafersImage")
         static let trousersImage = UIImage(named: "TrousersImage")
         static let tshirtImage = UIImage(named: "TshirtImage")
+        static let errorSneakers = UIImage(named: "ErrorSneakers")
     }
     
     // MARK: - Icons
     struct Icons {
         static let newTag = UIImage(named: "NewTagIcon")
         static let infoButton = UIImage(named: "InfoButtonIcon")
+        static let catalogIcon = UIImage(named: "CatalogIcon")
+        static let cartIcon = UIImage(named: "CartIcon")
     }
     
     // MARK: - Fonts
     struct Fonts {}
+    
+    struct Alpha {
+        static let activeAlpha: CGFloat = 1.0
+        static let inactiveAlpha: CGFloat = 0.5
+    }
 }
