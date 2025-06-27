@@ -32,7 +32,7 @@ class ClothesTypeEntityView: UIView {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        label.text = "HUI"
+        label.text = "извините"
         return label
     }()
     // MARK: - Lifecycle
